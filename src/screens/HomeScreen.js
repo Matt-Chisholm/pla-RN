@@ -10,6 +10,7 @@ import {
 } from "react-native-paper";
 import { ScrollView } from "react-native";
 import NewsApi from "../api/NewsApi";
+import Header from "../components/Header";
 
 export default function HomeScreen({ navigation }) {
   const [news, setNews] = React.useState([]);
