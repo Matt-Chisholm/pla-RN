@@ -6,6 +6,7 @@ import CameraScreen from "./src/screens/CameraScreen";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import { createAppContainer } from "react-navigation";
 import { Feather } from "@expo/vector-icons";
+import { AppRegistry } from "react-native";
 
 const theme = {
   ...DefaultTheme,
@@ -67,3 +68,5 @@ export default () => (
     <App />
   </PaperProvider>
 );
+
+AppRegistry.registerComponent("Plants", () => App);

@@ -1,12 +1,12 @@
 import React from "react";
 import { useTheme } from "react-native-paper";
 import {
-  Surface,
-  Typography,
+  ProgressBar,
+  Text,
+  Avatar,
+  Button,
   Card,
   List,
-  Avatar,
-  ProgressBar,
 } from "react-native-paper";
 import { ScrollView } from "react-native";
 import NewsApi from "../api/NewsApi";
@@ -24,7 +24,7 @@ export default function HomeScreen({ navigation }) {
         params: {
           q: "+plants -fuel -power -iron -environment -electric -wealth -money -industry -oil",
           language: "en",
-          pageSize: 10,
+          pageSize: 6,
         },
       });
       setNews(response.data.articles);
@@ -41,29 +41,35 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   return (
-    <ScrollView>
-      <Surface
-        style={[
-          styles.homeContainer,
-          { backgroundColor: theme.colors.background },
-        ]}>
-        <Typography style={styles.header}>Explore</Typography>
-        {loading && <ProgressBar />}
-        {error && <Typography>An error occured</Typography>}
-        {news.map((article) => (
-          <Card key={article.title} style={styles.newsContainer}>
-            <Card.Title
-              title={article.title}
-              subtitle={article.source.name}
-              left={(props) => <Avatar.Icon {...props} icon='newspaper' />}
-            />
-            <Card.Cover source={{ uri: article.urlToImage }} />
-            <Card.Content>
-              <Typography>{article.description}</Typography>
-            </Card.Content>
-          </Card>
-        ))}
-      </Surface>
+    <ScrollView style={styles.homeContainer}>
+      <Text style={styles.header}>Explore</Text>
+      <Card style={styles.newsContainer}>
+        <Card.Title
+          title='News'
+          subtitle='For you and your plants.'
+          left={(props) => <Avatar.Icon {...props} icon='newspaper' />}
+        />
+        <Card.Content>
+          <List.Section>
+            {news.map((item) => (
+              <List.Item
+                key={item.title}
+                title={item.title}
+                description={item.description}
+                left={(props) => (
+                  <Avatar.Image
+                    {...props}
+                    size={80}
+                    source={{ uri: item.urlToImage }}
+                  />
+                )}
+                onPress={() => navigation.navigate("News", { item })}
+              />
+            ))}
+          </List.Section>
+        </Card.Content>
+      </Card>
+      {loading && <ProgressBar indeterminate color={theme.colors.primary} />}
     </ScrollView>
   );
 }
@@ -73,17 +79,21 @@ const styles = {
     flex: 1,
     marginTop: 20,
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
   },
   header: {
-    fontSize: 30,
+    fontSize: 40,
     fontWeight: "bold",
-    marginTop: 40,
-    marginBottom: 20,
+    margin: 30,
+    color: "#77bf9e",
   },
   newsContainer: {
     width: "100%",
     marginBottom: 20,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 10,
   },
 };
