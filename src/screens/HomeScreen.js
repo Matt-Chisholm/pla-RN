@@ -1,19 +1,30 @@
-import { View, Text, StyleSheet, FlatList, Image } from "react-native";
 import React from "react";
+import { useTheme } from "react-native-paper";
+import {
+  Surface,
+  Typography,
+  Card,
+  List,
+  Avatar,
+  ProgressBar,
+} from "react-native-paper";
+import { ScrollView } from "react-native";
 import NewsApi from "../api/NewsApi";
 
 export default function HomeScreen({ navigation }) {
   const [news, setNews] = React.useState([]);
   const [error, setError] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const theme = useTheme();
 
   const loadNews = async () => {
     try {
       setLoading(true);
-      console.log(response);
       const response = await NewsApi.get("/everything", {
         params: {
-          q: "plants OR gardening OR gardening tips OR gardening hacks",
+          q: "+plants -fuel -power -iron -environment -electric -wealth -money -industry -oil",
+          language: "en",
+          pageSize: 10,
         },
       });
       setNews(response.data.articles);
@@ -30,62 +41,49 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={styles.homeContainer}>
-      <Text style={styles.header}>Explore</Text>
-      <FlatList
-        data={news}
-        keyExtractor={(item) => item.title}
-        renderItem={({ item }) => {
-          return (
-            <View style={styles.newsContainer}>
-              <Text style={styles.newsTitle}>{item.title}</Text>
-              <Text style={styles.newsDescription}>{item.description}</Text>
-              <Image
-                style={styles.newsImage}
-                source={{ uri: item.urlToImage }}
-              />
-            </View>
-          );
-        }}
-      />
-    </View>
+    <ScrollView>
+      <Surface
+        style={[
+          styles.homeContainer,
+          { backgroundColor: theme.colors.background },
+        ]}>
+        <Typography style={styles.header}>Explore</Typography>
+        {loading && <ProgressBar />}
+        {error && <Typography>An error occured</Typography>}
+        {news.map((article) => (
+          <Card key={article.title} style={styles.newsContainer}>
+            <Card.Title
+              title={article.title}
+              subtitle={article.source.name}
+              left={(props) => <Avatar.Icon {...props} icon='newspaper' />}
+            />
+            <Card.Cover source={{ uri: article.urlToImage }} />
+            <Card.Content>
+              <Typography>{article.description}</Typography>
+            </Card.Content>
+          </Card>
+        ))}
+      </Surface>
+    </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = {
   homeContainer: {
     flex: 1,
     marginTop: 20,
     display: "flex",
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
   header: {
     fontSize: 30,
     fontWeight: "bold",
-    color: "#000",
     marginTop: 40,
     marginBottom: 20,
   },
   newsContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
     width: "100%",
     marginBottom: 20,
   },
-  newsTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#000",
-  },
-  newsDescription: {
-    fontSize: 15,
-    color: "#000",
-  },
-  newsImage: {
-    width: 300,
-    height: 200,
-  },
-});
+};

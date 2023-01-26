@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import HomeScreen from "./src/screens/HomeScreen";
 import ReminderScreen from "./src/screens/ReminderScreen";
 import SearchScreen from "./src/screens/SearchScreen";
@@ -7,6 +6,16 @@ import CameraScreen from "./src/screens/CameraScreen";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import { createAppContainer } from "react-navigation";
 import { Feather } from "@expo/vector-icons";
+
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "#77bf9e",
+    accent: "#f1c40f",
+  },
+};
 
 const TabNavigator = createMaterialBottomTabNavigator(
   {
@@ -51,4 +60,10 @@ const TabNavigator = createMaterialBottomTabNavigator(
   }
 );
 
-export default createAppContainer(TabNavigator);
+const App = createAppContainer(TabNavigator);
+
+export default () => (
+  <PaperProvider theme={theme}>
+    <App />
+  </PaperProvider>
+);
