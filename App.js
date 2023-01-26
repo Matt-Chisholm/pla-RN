@@ -1,20 +1,54 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
+import HomeScreen from "./src/screens/HomeScreen";
+import ReminderScreen from "./src/screens/ReminderScreen";
+import SearchScreen from "./src/screens/SearchScreen";
+import CameraScreen from "./src/screens/CameraScreen";
+import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { createAppContainer } from "react-navigation";
+import { Feather } from "@expo/vector-icons";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const TabNavigator = createMaterialBottomTabNavigator(
+  {
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Feather name='home' color={tintColor} size={24} />
+        ),
+      },
+    },
+    Reminder: {
+      screen: ReminderScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Feather name='bell' color={tintColor} size={24} />
+        ),
+      },
+    },
+    Search: {
+      screen: SearchScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Feather name='search' color={tintColor} size={24} />
+        ),
+      },
+    },
+    Camera: {
+      screen: CameraScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Feather name='camera' color={tintColor} size={24} />
+        ),
+      },
+    },
   },
-});
+  {
+    initialRouteName: "Home",
+    activeColor: "#f0edf6",
+    inactiveColor: "#3e2465",
+    barStyle: { backgroundColor: "#77bf9e" },
+  }
+);
+
+export default createAppContainer(TabNavigator);
