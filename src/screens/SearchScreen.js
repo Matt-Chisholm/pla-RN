@@ -1,10 +1,18 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { View } from "react-native";
+import React, { useState } from "react";
+import { Searchbar, Text, Card } from "react-native-paper";
 
 export default function SearchScreen() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [results, setResults] = useState([]);
+
   return (
     <View>
-      <Text>SearchScreen</Text>
+      <Searchbar
+        placeholder='Search for your plant'
+        onChangeText={setSearchQuery}
+        value={searchQuery}
+      />
     </View>
   );
 }
