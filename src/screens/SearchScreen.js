@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { Searchbar, Text, Card } from "react-native-paper";
 
@@ -7,7 +7,7 @@ export default function SearchScreen() {
   const [results, setResults] = useState([]);
 
   return (
-    <View>
+    <View style={styles.searchContainer}>
       <Searchbar
         placeholder='Search for your plant'
         onChangeText={setSearchQuery}
@@ -16,3 +16,11 @@ export default function SearchScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  searchContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
