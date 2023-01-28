@@ -11,6 +11,7 @@ import {
 } from "react-native-paper";
 import axios from "axios";
 import { PLANT_KEY } from "@env";
+import Header from "../components/Header";
 
 export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,7 +25,7 @@ export default function SearchScreen() {
       const response = await axios.get(
         `https://trefle.io/api/v1/plants/search?token=${PLANT_KEY}&q=${searchQuery}`
       );
-      console.log(response.data.data);
+      console.log(typeof response.data.data[0]);
       setResults(response.data.data);
       setLoading(false);
     } catch (err) {
@@ -36,6 +37,7 @@ export default function SearchScreen() {
 
   return (
     <View style={styles.searchContainer}>
+      <Header />
       <Searchbar
         placeholder='Search for your plant'
         onChangeText={setSearchQuery}
@@ -48,26 +50,58 @@ export default function SearchScreen() {
         }}>
         Search
       </Button>
-      {loading && <ProgressBar indeterminate />}
+      {loading && <ProgressBar progress={0.5} style={styles.loader} />}
       {error && <Text>Error</Text>}
-      {results.map((item) => (
-        <View style={styles.resultsContainer}>
-          <Card key={item.id}>
-            <Card.Title
-              title={item.common_name}
-              subtitle={item.scientific_name}
-              left={(props) => (
-                <Avatar.Image
-                  {...props}
-                  source={{
-                    uri: item.image_url,
-                  }}
-                />
-              )}
-            />
-          </Card>
-        </View>
-      ))}
+      {results.length > 0 && (
+        <Card style={styles.newsContainer}>
+          <Card.Title
+            title={results[0].common_name}
+            subtitle={results[0].scientific_name}
+            left={(props) => (
+              <Avatar.Image
+                {...props}
+                source={{
+                  uri: results[0].image_url,
+                }}
+              />
+            )}
+          />
+          <Card.Content>
+            <List.Section>
+              <List.Item
+                title='Family'
+                description={results[0].family}
+                left={(props) => <Avatar.Icon {...props} icon='flower' />}
+              />
+              <List.Item
+                title='Genus'
+                description={results[0].genus}
+                left={(props) => <Avatar.Icon {...props} icon='flower' />}
+              />
+              <List.Item
+                title='Order'
+                description={results[0].order}
+                left={(props) => <Avatar.Icon {...props} icon='flower' />}
+              />
+              <List.Item
+                title='Kingdom'
+                description={results[0].kingdom}
+                left={(props) => <Avatar.Icon {...props} icon='flower' />}
+              />
+              <List.Item
+                title='Phylum'
+                description={results[0].phylum}
+                left={(props) => <Avatar.Icon {...props} icon='flower' />}
+              />
+              <List.Item
+                title='Species'
+                description={results[0].species}
+                left={(props) => <Avatar.Icon {...props} icon='flower' />}
+              />
+            </List.Section>
+          </Card.Content>
+        </Card>
+      )}
     </View>
   );
 }
@@ -75,16 +109,8 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   searchContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
-  resultsContainer: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    width: "80%",
-    justifyContent: "center",
-    alignItems: "center",
+  loader: {
+    marginTop: 10,
   },
 });
