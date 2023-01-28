@@ -1,5 +1,5 @@
 import {
-  View,
+  ScrollView,
   StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
@@ -30,8 +30,8 @@ export default function SearchScreen({ navigation }) {
       const response = await axios.get(
         `https://trefle.io/api/v1/plants/search?token=${PLANT_KEY}&q=${searchQuery}`
       );
-      console.log(typeof response.data.data[0]);
       setResults(response.data.data);
+      setError(false);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -42,7 +42,7 @@ export default function SearchScreen({ navigation }) {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.searchContainer}>
+      <ScrollView style={styles.searchContainer}>
         <Header goHome={() => navigation.navigate("Home")} />
         <Searchbar
           placeholder='Search for your plant'
@@ -54,6 +54,7 @@ export default function SearchScreen({ navigation }) {
           onPress={() => {
             loadResults();
             Keyboard.dismiss();
+            setSearchQuery("");
           }}>
           Search
         </Button>
@@ -74,6 +75,7 @@ export default function SearchScreen({ navigation }) {
               )}
             />
             <Card.Content>
+              <Text>{results[0].description}</Text>
               <List.Section>
                 <List.Item
                   title='Family'
@@ -85,31 +87,11 @@ export default function SearchScreen({ navigation }) {
                   description={results[0].genus}
                   left={(props) => <Avatar.Icon {...props} icon='flower' />}
                 />
-                <List.Item
-                  title='Order'
-                  description={results[0].order}
-                  left={(props) => <Avatar.Icon {...props} icon='flower' />}
-                />
-                <List.Item
-                  title='Kingdom'
-                  description={results[0].kingdom}
-                  left={(props) => <Avatar.Icon {...props} icon='flower' />}
-                />
-                <List.Item
-                  title='Phylum'
-                  description={results[0].phylum}
-                  left={(props) => <Avatar.Icon {...props} icon='flower' />}
-                />
-                <List.Item
-                  title='Species'
-                  description={results[0].species}
-                  left={(props) => <Avatar.Icon {...props} icon='flower' />}
-                />
               </List.Section>
             </Card.Content>
           </Card>
         )}
-      </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 }
