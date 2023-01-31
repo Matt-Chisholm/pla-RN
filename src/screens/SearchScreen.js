@@ -31,6 +31,7 @@ export default function SearchScreen({ navigation }) {
         `https://trefle.io/api/v1/plants/search?token=${PLANT_KEY}&q=${searchQuery}`
       );
       setResults(response.data.data);
+      console.log(response.data.data);
       setError(false);
       setLoading(false);
     } catch (err) {
