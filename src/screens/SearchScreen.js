@@ -24,10 +24,6 @@ export default function SearchScreen({ navigation }) {
   const [results, setResults] = useState([]);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
-    loadResults();
-  }, []);
-
   const loadResults = async () => {
     try {
       setLoading(true);
